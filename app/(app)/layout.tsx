@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Suspense } from "react"
 
+import { EnvironmentBadge } from "@/components/app/environment-badge"
 import { SidebarNav } from "@/components/app/sidebar-nav"
 import { UserMenu } from "@/components/app/user-menu"
 import { requireUser } from "@/lib/auth/guards"
@@ -36,7 +37,10 @@ export default async function AppLayout({
             <SidebarNav />
           </Suspense>
         </div>
-        <UserMenu name={user.name} email={user.email} />
+        <div className="grid gap-2">
+          <EnvironmentBadge />
+          <UserMenu name={user.name} email={user.email} />
+        </div>
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -47,7 +51,8 @@ export default async function AppLayout({
             </span>
             <span className="font-heading text-sm font-semibold">KiGo</span>
           </Link>
-          <div className="w-44">
+          <div className="flex w-52 items-center gap-2">
+            <EnvironmentBadge />
             <UserMenu name={user.name} email={user.email} />
           </div>
         </header>
