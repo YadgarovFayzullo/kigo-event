@@ -2,7 +2,6 @@ import "server-only"
 
 import { botFetch, type BotResult } from "./client"
 import {
-  groupStandingSchema,
   matchSchema,
   parsePage,
   participantSchema,
@@ -12,7 +11,6 @@ import {
   teamSchema,
   tournamentSchema,
   type ApiSport,
-  type GroupStanding,
   type MatchStatus,
   type Page,
   type ParticipantStatus,
@@ -304,18 +302,9 @@ export function listSports(): Promise<BotResult<Page<ApiSport>>> {
   return botFetch("sports/", parsePage(sportSchema), { revalidate: 3600 })
 }
 
-/** Group standings (served by the bot surface -- the admin API has none). */
-export function listStandings(): Promise<BotResult<Page<GroupStanding>>> {
-  return botFetch("tournaments/bot/standings/", parsePage(groupStandingSchema), {
-    headers: process.env.BOT_API_KEY
-      ? { "X-Bot-Api-Key": process.env.BOT_API_KEY }
-      : undefined,
-  })
-}
 
 export type {
   ApiSport,
-  GroupStanding,
   Page,
   ParticipantStatus,
   Referee,

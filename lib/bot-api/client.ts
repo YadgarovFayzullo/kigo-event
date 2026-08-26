@@ -71,12 +71,14 @@ export type BotFetchOptions = {
  *
  * The API authenticates a *person*, so the token is whatever the signed-in
  * operator received from `admin/auth/login/`. It is read out of their session
- * rather than an environment variable, which means two operators act as
- * themselves and nothing long-lived sits in the deployment config.
+ * rather than an environment variable: two operators act as themselves, and
+ * nothing long-lived sits in the deployment config.
+ *
+ * No fallback on purpose. Without a session the call should fail as
+ * unauthorised rather than go out carrying some other credential.
  */
 async function authToken(): Promise<string | undefined> {
-  const session = await auth()
-  return session?.user?.apiToken || process.env.BOT_API_KEY || undefined
+  return (await auth())?.user?.apiToken
 }
 
 function describe(error: unknown): string {

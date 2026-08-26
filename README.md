@@ -51,8 +51,7 @@ Everything goes through `lib/bot-api/`:
   authenticates a person, so two operators act as themselves and no long-lived
   credential sits in the deployment config.
 - **Admin responses are never cached.** They carry the operator's own token; a
-  shared cache entry would leak one operator's view to another. Only the
-  bot-facing standings endpoint is cached.
+  shared cache entry would leak one operator's view to another.
 - **Failures don't throw into a page.** Calls return a `BotResult` union, so an
   outage degrades one panel instead of a 500.
 - **Responses are parsed leniently.** Unknown fields are ignored and unreadable
@@ -85,12 +84,19 @@ Action can't return a file.
 docker compose up --build
 ```
 
-`AUTH_SECRET` (`openssl rand -base64 32`), `AUTH_URL` and `BOT_API_URL` are
-required — compose refuses to start without them. There is no database service
-to run alongside the app.
+Two variables, and that is the whole configuration:
 
-In development leave `AUTH_URL` unset: the origin is taken from the request, so
-sign-in works on whatever port the dev server picks.
+| Variable | |
+| --- | --- |
+| `AUTH_SECRET` | encrypts the session cookie — `openssl rand -base64 32` |
+| `BOT_API_URL` | which backend to talk to, `https://api.kigo.uz/api/` in production |
+
+There is no database service to run alongside the app, and no API key: the
+panel authenticates as the operator who signed in.
+
+`AUTH_URL` is optional. `trustHost` takes the origin from the request, so
+sign-in works on whatever host or port the app is served from; set it only
+behind a proxy that rewrites `Host`.
 
 ## Commands
 

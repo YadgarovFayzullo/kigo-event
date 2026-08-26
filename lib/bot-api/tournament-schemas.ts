@@ -146,26 +146,6 @@ export const refereeSchema = z.object({
   rating_count: z.number().nullish(),
 })
 
-export const standingRowSchema = z.object({
-  position: z.number(),
-  team_id: z.union([z.string(), z.number()]).transform(String),
-  team_name: z.string(),
-  played: z.number(),
-  won: z.number(),
-  drawn: z.number(),
-  lost: z.number(),
-  goals_for: z.number(),
-  goals_against: z.number(),
-  goal_difference: z.number(),
-  points: z.number(),
-})
-
-export const groupStandingSchema = z.object({
-  group_id: z.union([z.string(), z.number()]).transform(String),
-  group_name: z.string(),
-  rows: z.array(standingRowSchema),
-})
-
 export const sportSchema = z.object({
   id: id,
   code: z.string().nullish(),
@@ -180,8 +160,6 @@ export type TournamentTeam = z.infer<typeof teamSchema>
 export type TournamentMatch = z.infer<typeof matchSchema>
 export type Referee = z.infer<typeof refereeSchema>
 export type Resident = z.infer<typeof residentSchema>
-export type GroupStanding = z.infer<typeof groupStandingSchema>
-export type StandingRow = z.infer<typeof standingRowSchema>
 export type ApiSport = z.infer<typeof sportSchema>
 
 export type Page<T> = {

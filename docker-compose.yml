@@ -14,7 +14,6 @@ services:
       AUTH_URL: ${AUTH_URL:-}
       AUTH_TRUST_HOST: "true"
       BOT_API_URL: ${BOT_API_URL:?set BOT_API_URL in .env}
-      BOT_API_KEY: ${BOT_API_KEY:-}
       BOT_API_REVALIDATE: ${BOT_API_REVALIDATE:-60}
       BOT_API_TIMEOUT_MS: ${BOT_API_TIMEOUT_MS:-8000}
     ports:
