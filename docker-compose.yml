@@ -8,8 +8,10 @@ services:
     environment:
       # Required. Without it the app refuses to start.
       AUTH_SECRET: ${AUTH_SECRET:?set AUTH_SECRET in .env}
-      # Public origin, needed behind a proxy so sign-in redirects are right.
-      AUTH_URL: ${AUTH_URL:?set AUTH_URL in .env}
+      # Optional. `trustHost` derives the origin from the request, so this is
+      # only needed behind a proxy that rewrites the Host header to something
+      # other than the address users actually visit.
+      AUTH_URL: ${AUTH_URL:-}
       AUTH_TRUST_HOST: "true"
       BOT_API_URL: ${BOT_API_URL:?set BOT_API_URL in .env}
       BOT_API_KEY: ${BOT_API_KEY:-}
