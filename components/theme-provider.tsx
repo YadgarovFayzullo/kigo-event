@@ -47,7 +47,9 @@ function ThemeHotkey() {
         return
       }
 
-      if (event.key.toLowerCase() !== "d") {
+      // `key` is optional on KeyboardEvent in practice: autofill, IME
+      // composition and some extensions dispatch keydown without it.
+      if (event.key?.toLowerCase() !== "d") {
         return
       }
 

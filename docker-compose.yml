@@ -1,0 +1,33 @@
+# The operator panel is the whole deployment: it stores nothing and talks only
+# to the KiGo API, so there is no database or cache service to run alongside it.
+services:
+  app:
+    build:
+      context: .
+    restart: unless-stopped
+    environment:
+      # Required. Without it the app refuses to start.
+      AUTH_SECRET: ${AUTH_SECRET:?set AUTH_SECRET in .env}
+      # Public origin, needed behind a proxy so sign-in redirects are right.
+      AUTH_URL: ${AUTH_URL:?set AUTH_URL in .env}
+      AUTH_TRUST_HOST: "true"
+      BOT_API_URL: ${BOT_API_URL:?set BOT_API_URL in .env}
+      BOT_API_KEY: ${BOT_API_KEY:-}
+      BOT_API_REVALIDATE: ${BOT_API_REVALIDATE:-60}
+      BOT_API_TIMEOUT_MS: ${BOT_API_TIMEOUT_MS:-8000}
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    healthcheck:
+      # The login page renders without a session or a reachable API, which
+      # makes it the right thing to probe: it answers only if the app is up.
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/login').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
