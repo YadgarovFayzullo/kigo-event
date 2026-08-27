@@ -2,6 +2,16 @@
 
 import Link from "next/link"
 import { usePathname, useSearchParams } from "next/navigation"
+import { HugeiconsIcon } from "@hugeicons/react"
+import {
+  Building03Icon,
+  ChampionIcon,
+  ClipboardIcon,
+  FootballIcon,
+  HierarchyIcon,
+  UserGroupIcon,
+  WhistleIcon,
+} from "@hugeicons/core-free-icons"
 
 import { cn } from "@/lib/utils"
 
@@ -13,13 +23,13 @@ import { cn } from "@/lib/utils"
  * scopes all of them, which is how operators actually work.
  */
 export const SECTIONS = [
-  { href: "/tournaments", label: "Turnirlar" },
-  { href: "/participants", label: "Zayavkalar" },
-  { href: "/teams", label: "Jamoalar" },
-  { href: "/matches", label: "Oʻyinlar" },
-  { href: "/bracket", label: "Setka" },
-  { href: "/referees", label: "Hakamlar" },
-  { href: "/residents", label: "Rezidentlar" },
+  { href: "/tournaments", label: "Turnirlar", icon: ChampionIcon },
+  { href: "/participants", label: "Zayavkalar", icon: ClipboardIcon },
+  { href: "/teams", label: "Jamoalar", icon: UserGroupIcon },
+  { href: "/matches", label: "Oʻyinlar", icon: FootballIcon },
+  { href: "/bracket", label: "Setka", icon: HierarchyIcon },
+  { href: "/referees", label: "Hakamlar", icon: WhistleIcon },
+  { href: "/residents", label: "Rezidentlar", icon: Building03Icon },
 ] as const
 
 /** Sections scoped by the selected tournament keep it in the query string. */
@@ -59,13 +69,14 @@ export function SidebarNav({
             href={href}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "rounded-md px-2.5 py-2 text-sm font-medium transition-colors",
+              "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium transition-colors",
               orientation === "horizontal" && "shrink-0 whitespace-nowrap",
               active
                 ? "bg-sidebar-accent text-sidebar-accent-foreground"
                 : "text-muted-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground"
             )}
           >
+            <HugeiconsIcon icon={item.icon} className="size-4 shrink-0" />
             {item.label}
           </Link>
         )
