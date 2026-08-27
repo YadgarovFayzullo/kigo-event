@@ -3,14 +3,19 @@ import { redirect } from "next/navigation"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { getSessionUser } from "@/lib/auth/guards"
+import { missingConfig } from "@/lib/config-check"
 
 import { LoginForm } from "./login-form"
 
 export const metadata: Metadata = { title: "Kirish" }
 
 export default async function LoginPage() {
+  // Checked before touching NextAuth: without AUTH_SECRET it throws on every
+  // call, and the resulting 500 says nothing about which variable is missing.
+  const missing = missingConfig()
+
   // Already signed in? Skip the form.
-  if (await getSessionUser()) redirect("/tournaments")
+  if (missing.length === 0 && (await getSessionUser())) redirect("/tournaments")
 
   return (
     <main className="grid min-h-svh place-items-center px-4 py-10">
@@ -31,7 +36,31 @@ export default async function LoginPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <LoginForm />
+            {missing.length > 0 ? (
+              <div className="grid gap-3 text-sm">
+                <p className="font-medium text-destructive">
+                  Server sozlanmagan
+                </p>
+                <p className="text-muted-foreground">
+                  Quyidagi oʻzgaruvchilar berilmagan, shuning uchun kirish
+                  ishlamaydi:
+                </p>
+                <ul className="grid gap-2">
+                  {missing.map((item) => (
+                    <li key={item.name} className="rounded-md bg-muted px-3 py-2">
+                      <code className="font-mono text-xs font-semibold">
+                        {item.name}
+                      </code>
+                      <span className="block text-xs text-muted-foreground">
+                        {item.hint}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <LoginForm />
+            )}
           </CardContent>
         </Card>
       </div>

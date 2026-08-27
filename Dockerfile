@@ -14,6 +14,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # Nothing is prerendered -- every page is per-request against the KiGo API --
 # so the build needs no credentials beyond a placeholder session secret.
+# Build-time only: the running container must be given a real one.
 ENV AUTH_SECRET=build-time-placeholder
 RUN npm run build
 

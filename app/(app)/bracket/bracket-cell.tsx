@@ -52,7 +52,7 @@ export function BracketCell({
 }: {
   tournamentId: string
   match: BracketCellMatch
-  referees?: { id: string; name: string }[]
+  referees?: { id: string; name: string; isActive: boolean }[]
   /**
    * Demo mode. When supplied, the result is handed here instead of being sent
    * to the API -- the card stays fully interactive, which is the entire point

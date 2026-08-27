@@ -39,7 +39,7 @@ export function BracketBoard({
 }: {
   rounds: BoardRound[]
   tournamentId: string
-  referees?: { id: string; name: string }[]
+  referees?: { id: string; name: string; isActive: boolean }[]
   /** Demo mode: results are handled locally instead of being sent. */
   onResult?: (result: {
     matchId: string

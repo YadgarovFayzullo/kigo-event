@@ -44,9 +44,11 @@ export default async function MatchesPage({
   ])
 
   const refereeOptions = referees.ok
-    ? referees.data.items
-        .filter((referee) => referee.is_active !== false)
-        .map((referee) => ({ id: referee.id, name: referee.full_name }))
+    ? referees.data.items.map((referee) => ({
+        id: referee.id,
+        name: referee.full_name,
+        isActive: referee.is_active !== false,
+      }))
     : []
 
   const stageHref = (value: string) => {

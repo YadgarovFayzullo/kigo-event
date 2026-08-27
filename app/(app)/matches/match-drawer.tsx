@@ -55,7 +55,7 @@ export function MatchDrawer({
 }: {
   tournamentId: string
   match: MatchRow
-  referees: { id: string; name: string }[]
+  referees: { id: string; name: string; isActive: boolean }[]
   /** Row number, shown only by the default table-row trigger. */
   number?: number
   /**
@@ -111,6 +111,15 @@ export function MatchDrawer({
   }
 
   const stageLabel = match.stage === "playoff" ? "Pley-off" : "Guruh"
+
+  /**
+   * Deactivated referees stay selectable when they are the one already on this
+   * fixture -- otherwise opening the drawer would silently drop the assignment
+   * the moment someone saved anything else.
+   */
+  const assignable = referees.filter(
+    (option) => option.isActive || option.id === match.referee
+  )
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -193,13 +202,20 @@ export function MatchDrawer({
               value={referee}
               onChange={(event) => setReferee(event.target.value)}
             >
-              <option value="">—</option>
-              {referees.map((option) => (
+              <option value="">Tayinlanmagan</option>
+              {assignable.map((option) => (
                 <option key={option.id} value={option.id}>
                   {option.name}
+                  {option.isActive ? "" : " (faolsiz)"}
                 </option>
               ))}
             </NativeSelect>
+            {assignable.length === 0 ? (
+              <p className="text-xs text-muted-foreground">
+                Faol hakam yoʻq — avval «Hakamlar» boʻlimida qoʻshing yoki
+                faollashtiring.
+              </p>
+            ) : null}
           </div>
 
           <div className="grid grid-cols-2 gap-3">
