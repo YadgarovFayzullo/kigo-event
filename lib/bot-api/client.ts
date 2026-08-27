@@ -3,7 +3,7 @@ import "server-only"
 import { auth } from "@/lib/auth"
 
 /**
- * The single place where the CRM talks to the KiGo bot's backend.
+ * The single place where this app talks to the KiGo API.
  *
  * Everything the bot owns -- Telegram users, bookings, payments, venues --
  * comes through here over HTTP. The CRM never opens a connection to the bot's
@@ -16,7 +16,7 @@ import { auth } from "@/lib/auth"
  *      and render a degraded panel instead of a 500.
  */
 
-/** Bot API is external and may be down, slow, or partial. Model that. */
+/** The API is external and may be down, slow, or partial. Model that. */
 export type BotResult<T> =
   | { ok: true; data: T }
   | { ok: false; error: BotApiError }
@@ -35,10 +35,27 @@ export type BotApiError = {
   status?: number
 }
 
-const DEFAULT_TIMEOUT_MS = Number(process.env.BOT_API_TIMEOUT_MS ?? 8000)
+/**
+ * Reads a positive number from the environment, falling back on anything
+ * unusable.
+ *
+ * `??` only guards `undefined`, and a variable declared with no value arrives
+ * as `""`, which `Number` turns into 0. As a timeout that aborts every request
+ * before it is sent -- the panel then reports "did not respond within 0ms",
+ * which reads like the platform is down when the deployment config is at fault.
+ */
+function positiveEnv(raw: string | undefined, fallback: number): number {
+  const value = Number(raw)
+  return Number.isFinite(value) && value > 0 ? value : fallback
+}
+
+const DEFAULT_TIMEOUT_MS = positiveEnv(process.env.BOT_API_TIMEOUT_MS, 8000)
 
 /** Default cache window. Short enough to feel live, long enough to be kind. */
-export const BOT_CACHE_SECONDS = Number(process.env.BOT_API_REVALIDATE ?? 60)
+export const BOT_CACHE_SECONDS = positiveEnv(
+  process.env.BOT_API_REVALIDATE,
+  60
+)
 
 /** Cache tags, so mutations elsewhere can invalidate bot reads deliberately. */
 export const BOT_TAGS = {
@@ -108,7 +125,7 @@ export async function botFetch<T>(
       error: {
         kind: "not_configured",
         message:
-          "BOT_API_URL is not set, so bot data is unavailable. Set it in .env.local.",
+          "BOT_API_URL is not set, so no data can be loaded.",
       },
     }
   }
@@ -155,8 +172,8 @@ export async function botFetch<T>(
       error: {
         kind: timedOut ? "timeout" : "network",
         message: timedOut
-          ? `Bot API did not respond within ${timeoutMs}ms.`
-          : `Could not reach the bot API: ${describe(error)}`,
+          ? `KiGo API did not respond within ${timeoutMs}ms.`
+          : `Could not reach the KiGo API: ${describe(error)}`,
       },
     }
   }
@@ -183,7 +200,7 @@ export async function botFetch<T>(
       ok: false,
       error: {
         kind: "invalid_response",
-        message: `Unexpected response shape from the bot API: ${describe(error)}`,
+        message: `Unexpected response shape from the KiGo API: ${describe(error)}`,
       },
     }
   }

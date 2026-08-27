@@ -18,12 +18,12 @@ const ICONS: Record<BotApiError["kind"], typeof Alert01Icon> = {
 }
 
 const HEADLINES: Record<BotApiError["kind"], string> = {
-  not_configured: "Bot API sozlanmagan",
-  timeout: "Bot API javob bermadi",
-  network: "Bot APIʼga ulanib boʻlmadi",
-  http: "Bot API xatolik qaytardi",
-  unauthorized: "Bot API kirish maʼlumotlarini rad etdi",
-  invalid_response: "Bot APIʼdan kutilmagan maʼlumot",
+  not_configured: "KiGo API sozlanmagan",
+  timeout: "KiGo API javob bermadi",
+  network: "KiGo APIʼga ulanib boʻlmadi",
+  http: "KiGo API xatolik qaytardi",
+  unauthorized: "KiGo API kirish maʼlumotlarini rad etdi",
+  invalid_response: "KiGo APIʼdan kutilmagan maʼlumot",
 }
 
 /**
@@ -44,7 +44,7 @@ export function BotDataNotice({ error }: { error: BotApiError }) {
         <p className="font-medium">{HEADLINES[error.kind]}</p>
         <p className="text-muted-foreground">{error.message}</p>
         <p className="text-xs text-muted-foreground">
-          Ushbu sahifadagi CRM maʼlumotlari oʻzgarmagan.
+          Sahifaning qolgan qismi oʻzgarmagan.
         </p>
       </div>
     </div>
