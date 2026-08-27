@@ -1,6 +1,8 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useState } from "react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { ViewIcon, ViewOffSlashIcon } from "@hugeicons/core-free-icons"
 
 import { Field } from "@/components/app/field"
 import { SubmitButton } from "@/components/app/submit-button"
@@ -11,6 +13,7 @@ import { signInWithCredentials } from "./actions"
 
 export function LoginForm() {
   const [state, formAction] = useActionState(signInWithCredentials, idleState)
+  const [visible, setVisible] = useState(false)
 
   return (
     <form action={formAction} className="grid gap-4">
@@ -37,14 +40,31 @@ export function LoginForm() {
         error={state.fieldErrors?.password}
         required
       >
-        <Input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          required
-          aria-invalid={Boolean(state.fieldErrors?.password) || undefined}
-        />
+        {/* A keyboard layout is the usual reason a password is "wrong" here,
+            and revealing it is the fastest way to see that. */}
+        <div className="relative">
+          <Input
+            id="password"
+            name="password"
+            type={visible ? "text" : "password"}
+            autoComplete="current-password"
+            required
+            className="pr-9"
+            aria-invalid={Boolean(state.fieldErrors?.password) || undefined}
+          />
+          <button
+            type="button"
+            onClick={() => setVisible((shown) => !shown)}
+            aria-label={visible ? "Parolni yashirish" : "Parolni koʻrsatish"}
+            aria-pressed={visible}
+            className="absolute inset-y-0 right-0 grid w-9 place-items-center rounded-r-md text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+          >
+            <HugeiconsIcon
+              icon={visible ? ViewOffSlashIcon : ViewIcon}
+              className="size-4"
+            />
+          </button>
+        </div>
       </Field>
 
       {state.status === "error" && state.message ? (

@@ -10,7 +10,9 @@ function ThemeProvider({
   return (
     <NextThemesProvider
       attribute="class"
-      defaultTheme="system"
+      // Dark by default. `enableSystem` stays on so the toggle still offers
+      // the light theme, but an operator who never touches it gets dark.
+      defaultTheme="dark"
       enableSystem
       disableTransitionOnChange
       {...props}
