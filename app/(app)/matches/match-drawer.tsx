@@ -205,7 +205,7 @@ export function MatchDrawer({
           <div className="grid grid-cols-2 gap-3">
             <div className="grid gap-1.5">
               <label htmlFor="home" className="text-sm font-medium">
-                Uy
+                Mezbonlar
               </label>
               <Input
                 id="home"
@@ -217,7 +217,7 @@ export function MatchDrawer({
             </div>
             <div className="grid gap-1.5">
               <label htmlFor="away" className="text-sm font-medium">
-                Mehmon
+                Mehmonlar
               </label>
               <Input
                 id="away"

@@ -79,6 +79,7 @@ export default async function ParticipantsPage({
           <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             <StatCard
               label="Ishtirokchilar"
+              hint="Roʻyxatdan oʻtganlar"
               value={formatNumber(scope.selected.participants_count ?? 0)}
               chart={
                 <Sparkline
@@ -89,6 +90,7 @@ export default async function ParticipantsPage({
             />
             <StatCard
               label="Jamoalar"
+              hint="Tuzilgan jamoalar soni"
               value={formatNumber(scope.selected.teams_count ?? 0)}
               chart={
                 <Sparkline
@@ -103,9 +105,14 @@ export default async function ParticipantsPage({
                 />
               }
             />
-            <StatCard label="Jamoada" value={scope.selected.team_size ?? "—"} />
+            <StatCard
+              label="Jamoa tarkibi"
+              hint="Sozlama: bir jamoada nechta oʻyinchi"
+              value={scope.selected.team_size ?? "—"}
+            />
             <StatCard
               label="Jamoa limiti"
+              hint="Sozlama: koʻpi bilan nechta jamoa"
               value={scope.selected.max_teams ?? "—"}
             />
           </section>

@@ -109,8 +109,8 @@ export default async function MatchesPage({
                         <TableHead>Bosqich</TableHead>
                         <TableHead>Guruh</TableHead>
                         <TableHead>Tur</TableHead>
-                        <TableHead>Uy</TableHead>
-                        <TableHead>Mehmon</TableHead>
+                        <TableHead>Mezbonlar</TableHead>
+                        <TableHead>Mehmonlar</TableHead>
                         <TableHead>Hisob</TableHead>
                         <TableHead>Vaqti</TableHead>
                         <TableHead>Hakam</TableHead>
